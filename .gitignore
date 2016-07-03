@@ -97,3 +97,5 @@ ENV/
 # Rope project settings
 .ropeproject
 
+# For Python daemon
+*.pid
