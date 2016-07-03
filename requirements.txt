@@ -1,0 +1,6 @@
+aiohttp==0.21.6
+asynctest==0.5.0
+cchardet==1.0.0
+pep8==1.7.0
+ConfigObj==5.0.6
+six==1.10.0
