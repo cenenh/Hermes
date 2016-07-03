@@ -5,6 +5,7 @@ import optparse
 import os
 import pwd
 import grp
+from hermes.server import run
 
 
 def setup_logging(config, stdout=False):
@@ -198,7 +199,7 @@ if __name__ == "__main__":
             log.debug("Wrote child PID file: %s" % (options.pidfile))
 
         # Server Start!
-        # run_server()
+        run()
 
     # Pass the exit up stream rather then handle it as an general exception
     except SystemExit as e:
