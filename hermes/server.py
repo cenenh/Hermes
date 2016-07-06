@@ -3,6 +3,8 @@ import os
 import logging
 from aiohttp import log, web, request
 from hermes.web.ping import ping_handler
+from hermes.web.user import get_user_handler
+from hermes.web.login import login_handler
 
 
 @asyncio.coroutine
@@ -14,11 +16,11 @@ def run():
     logging.debug('run server!')
     loop = asyncio.get_event_loop()
     app = web.Application(loop=loop)
-
     # add_route
     app.router.add_route('GET', '/', hermes_handler)
     app.router.add_route('GET', '/ping', ping_handler)
-
+    app.router.add_route('GET', '/user/{name}', get_user_handler)
+    app.router.add_route('POST', '/api/web/login', login_handler)
     server_handler = app.make_handler(access_log=logging.getLogger())
     server = loop.run_until_complete(loop.create_server(server_handler,
                                                         '0.0.0.0', 8080))
