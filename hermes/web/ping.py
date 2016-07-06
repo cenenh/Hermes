@@ -6,7 +6,7 @@ import json
 @asyncio.coroutine
 def ping_handler(request):
     response = {
-        'statusCode': 200,
+        'code': 200,
         'data': 'pong'
     }
     headers = {'content-type': 'application/json'}
