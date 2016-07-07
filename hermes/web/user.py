@@ -1,5 +1,5 @@
 from aiohttp import web, Response
-from hermes.mysql import mysql
+from hermes.mysql import MySQL
 import asyncio
 import logging
 
@@ -8,7 +8,7 @@ import logging
 def get_user_handler(request):
     loop = asyncio.get_event_loop()
     user_name = request.match_info.get('name', 'admin')
-    db = mysql(loop)
+    db = MySQL(loop)
     yield from db.connect()
     results = yield from db.execute_query('select * from test')
     yield from db.close()

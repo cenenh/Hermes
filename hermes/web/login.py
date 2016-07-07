@@ -1,5 +1,5 @@
 from aiohttp import web, Response, errors
-from hermes.mysql import mysql
+from hermes.mysql import MySQL
 import asyncio
 import logging
 import json
@@ -9,7 +9,7 @@ import json
 def login_handler(request):
     loop = asyncio.get_event_loop()
     data = yield from request.json()
-    db = mysql(loop)
+    db = MySQL(loop)
     yield from db.connect()
     query = """SELECT * FROM admin_user
             WHERE id = '%s' and

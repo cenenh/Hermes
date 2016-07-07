@@ -2,7 +2,7 @@ import asyncio
 import aiomysql
 
 
-class mysql():
+class MySQL():
 
     def __init__(self, loop):
         self.host = '127.0.0.1'
