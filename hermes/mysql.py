@@ -4,13 +4,12 @@ import aiomysql
 
 class MySQL():
 
-    def __init__(self, loop):
+    def __init__(self):
         self.host = '127.0.0.1'
         self.port = 3306
         self.user = 'root'
         self.password = '1q2w3e4r'
         self.db = 'hermes'
-        self.loop = loop
         self.connection = None
         self.cursor = None
 
@@ -21,7 +20,8 @@ class MySQL():
                                                       user=self.user,
                                                       password=self.password,
                                                       db=self.db,
-                                                      loop=self.loop)
+                                                      charset='utf8',
+                                                      autocommit=True)
         self.cursor = yield from self.connection.cursor(aiomysql.DictCursor)
         return self.cursor
 
