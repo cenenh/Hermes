@@ -7,15 +7,14 @@ import json
 
 @asyncio.coroutine
 def login_handler(request):
-    loop = asyncio.get_event_loop()
     data = yield from request.json()
-    db = MySQL(loop)
-    yield from db.connect()
-    query = """SELECT * FROM admin_user
+    mysql = MySQL()
+    yield from mysql.connect()
+    query = """SELECT * FROM administrator
             WHERE id = '%s' and
             password = '%s'""" % (data['id'], data['password'])
-    results = yield from db.execute_query(query)
-    yield from db.close()
+    results = yield from mysql.execute_query(query)
+    yield from mysql.close()
     response = {
         'code': 200,
         'message': 'login success'
@@ -25,6 +24,9 @@ def login_handler(request):
             'code': 400,
             'message': 'Password Incorrect or No Such User'
         }
+
+    logging.info('add login handler Response = {}'.format(response))
+
     headers = {'content-type': 'application/json'}
     return web.Response(headers=headers,
                         text=json.dumps(response))
