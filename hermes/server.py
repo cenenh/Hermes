@@ -1,12 +1,14 @@
 import asyncio
 import os
 import logging
-from aiohttp import log, web, request
+from aiohttp import web, request
 from hermes.web.ping import ping_handler
 from hermes.web.user import get_user_handler
 from hermes.web.login import login_handler
 from hermes.web.employee import add_employee_handler
 from hermes.web.employee import get_employee_handler
+from hermes.arduino.work import go_work_handler
+from hermes.arduino.work import off_work_handler
 
 
 @asyncio.coroutine
@@ -25,6 +27,8 @@ def run():
     app.router.add_route('POST', '/api/web/login', login_handler)
     app.router.add_route('POST', '/api/web/employee', add_employee_handler)
     app.router.add_route('GET', '/api/web/employee', get_employee_handler)
+    app.router.add_route('POST', '/api/arduino/gowork', go_work_handler)
+    app.router.add_route('POST', '/api/arduino/offwork', off_work_handler)
 
     server_handler = app.make_handler(access_log=logging.getLogger())
     server = loop.run_until_complete(loop.create_server(server_handler,
