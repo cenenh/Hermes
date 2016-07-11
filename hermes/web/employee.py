@@ -6,7 +6,7 @@ import json
 from hermes.util.file import open_file, write_file, close_file, save_image
 
 
-SERVER_URL = 'http://52.78.10.38:8000/images/employees/'
+SERVER_URL = 'http://52.78.10.38:8000/images/employee/'
 
 
 @asyncio.coroutine
