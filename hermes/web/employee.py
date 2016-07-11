@@ -53,3 +53,30 @@ def add_employee_handler(request):
     headers = {'content-type': 'application/json'}
     return web.Response(headers=headers,
                         text=json.dumps(response))
+
+
+@asyncio.coroutine
+def get_employee_handler(request):
+    mysql = MySQL()
+    yield from mysql.connect()
+    rows = yield from mysql.execute_query("""SELECT * from employee""")
+    yield from mysql.close()
+    response = {}
+    response['size'] = len(rows)
+    response['employees'] = []
+    for row in rows:
+        response['employees'].append({
+            'card_id': row['card_id'],
+            'employee_name': row['employee_name'],
+            'enterprise': row['enterprise'],
+            'duty': row['duty'],
+            'workspace': row['workspace'],
+            'phone_number': row['phone_number'],
+            'email': row['email'],
+            'photo_url': row['photo_url']
+        })
+
+    logging.info('get employee handler Response = {}\n'.format(response))
+    headers = {'content-type': 'application/json'}
+    return web.Response(headers=headers,
+                        text=json.dumps(response))
