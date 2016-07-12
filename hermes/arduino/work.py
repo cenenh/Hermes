@@ -49,12 +49,18 @@ def working_handler(request):
         query = """UPDATE works SET off_work_time = '%s', working_time = '%s'
                    where card_id = '%s' and date = '%s'""" % args
         yield from mysql.execute_query(query)
-
+    
+    query = """SELECT * FROM break_time WHERE id = 'hermes'"""
+    results = yield from mysql.execute_query(query)
     yield from mysql.close()
     headers = {'content-type': 'application/json'}
-    # response는 현재 break_time인지 아닌지를 알려줘야 한다.
+    response = {
+        'code': 200,
+        'message': 'ok',
+        'break_time': results[0]['is_break_time']
+    }
     return web.Response(headers=headers,
-                        text=json.dumps({'code': 200, 'message': 'ok'}))
+                        text=json.dumps(response))
 
 
 @asyncio.coroutine
