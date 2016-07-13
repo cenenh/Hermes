@@ -8,8 +8,6 @@ from hermes.web.user import add_user_handler
 from hermes.web.login import login_handler
 from hermes.web.employee import add_employee_handler
 from hermes.web.employee import get_employee_handler
-from hermes.arduino.work import go_work_handler
-from hermes.arduino.work import off_work_handler
 from hermes.arduino.work import working_handler
 
 
@@ -30,8 +28,6 @@ def run():
     app.router.add_route('POST', '/api/web/login', login_handler)
     app.router.add_route('POST', '/api/web/employee', add_employee_handler)
     app.router.add_route('GET', '/api/web/employee', get_employee_handler)
-    app.router.add_route('POST', '/api/arduino/gowork', go_work_handler)
-    app.router.add_route('POST', '/api/arduino/offwork', off_work_handler)
     app.router.add_route('POST', '/api/arduino/working', working_handler)
 
     server_handler = app.make_handler(access_log=logging.getLogger())
