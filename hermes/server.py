@@ -8,7 +8,9 @@ from hermes.web.user import add_user_handler
 from hermes.web.login import login_handler
 from hermes.web.employee import add_employee_handler
 from hermes.web.employee import get_employee_handler
+from hermes.web.employee import get_employee_by_date_handler
 from hermes.arduino.work import working_handler
+from hermes.web.getHermetStatus import get_hermet_status_handler
 
 
 @asyncio.coroutine
@@ -27,6 +29,10 @@ def run():
     app.router.add_route('POST', '/api/web/test/user', add_user_handler)
     app.router.add_route('POST', '/api/web/login', login_handler)
     app.router.add_route('POST', '/api/web/employee', add_employee_handler)
+    app.router.add_route('GET', '/api/web/employee/today',
+                         get_employee_by_date_handler)
+    app.router.add_route('GET', '/api/web/hermet/status',
+                         get_hermet_status_handler)
     app.router.add_route('GET', '/api/web/employee', get_employee_handler)
     app.router.add_route('POST', '/api/arduino/working', working_handler)
 

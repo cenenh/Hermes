@@ -1,9 +1,10 @@
 # coding=utf-8
-from aiohttp import web, Response, errors
-from hermes.mysql import MySQL
 import asyncio
 import logging
 import json
+from aiohttp import web, Response, errors
+from hermes.mysql import MySQL
+from hermes.util.time import getToday
 from hermes.util.file import open_file, write_file, close_file, save_image
 from hermes.constant import DUTY, SERVER_URL
 
@@ -65,6 +66,48 @@ def add_employee_handler(request):
 
 
 @asyncio.coroutine
+def get_employee_by_date_handler(request):
+    data = request.GET
+    try:
+        card_id = data.get('card_id', None)
+    except Exception as e:
+        card_id = None
+
+    date = getToday()
+    query = """SELECT * FROM employee natural join works
+               where date ='%s'""" % date
+    if card_id:
+        query = """SELECT * FROM employee natural join works
+                where card_id = '%s' and date ='%s'""" % (card_id, date)
+
+    mysql = MySQL()
+    yield from mysql.connect()
+    rows = yield from mysql.execute_query(query)
+    yield from mysql.close()
+    response = {}
+    response['size'] = len(rows)
+    response['employees'] = []
+    for row in rows:
+        response['employees'].append({
+            'card_id': row['card_id'],
+            'employee_name': row['employee_name'],
+            'phone_number': row['phone_number'],
+            'email': row['email'],
+            'duty': row['duty'],
+            'workspace': row['workspace'],
+            'photo_url': row['photo_url'],
+            'go_work_time': row['go_work_time'],
+            'off_work_time': row['off_work_time'],
+        })
+
+    log = 'get_employee_by_date_handler Response = {}\n'
+    logging.info(log.format(response))
+    headers = {'content-type': 'application/json'}
+    return web.Response(headers=headers,
+                        text=json.dumps(response))
+
+
+@asyncio.coroutine
 def get_employee_handler(request):
     mysql = MySQL()
     yield from mysql.connect()
@@ -82,7 +125,10 @@ def get_employee_handler(request):
             'workspace': row['workspace'],
             'phone_number': row['phone_number'],
             'email': row['email'],
-            'photo_url': row['photo_url']
+            'photo_url': row['photo_url'],
+            'registration_number': row['registration_number'],
+            'unit_price': row['unit_price'],
+            'pay': row['unit_price'] * 20,
         })
 
     logging.info('get employee handler Response = {}\n'.format(response))
