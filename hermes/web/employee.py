@@ -68,12 +68,10 @@ def add_employee_handler(request):
 @asyncio.coroutine
 def get_employee_by_date_handler(request):
     data = request.GET
-    try:
-        card_id = data.get('card_id', None)
-    except Exception as e:
-        card_id = None
-
-    date = getToday()
+    card_id = data.get('card_id', None)
+    date = data.get('date', None)
+    if not date:
+        date = getToday()
     query = """SELECT * FROM employee natural join works
                where date ='%s'""" % date
     if card_id:
@@ -89,6 +87,7 @@ def get_employee_by_date_handler(request):
     response['employees'] = []
     for row in rows:
         response['employees'].append({
+            'date': date,
             'card_id': row['card_id'],
             'employee_name': row['employee_name'],
             'phone_number': row['phone_number'],
