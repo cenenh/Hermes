@@ -15,6 +15,7 @@ from hermes.web.getHermetStatus import get_hermet_status_handler
 from hermes.web.breakTime import set_break_time_handler
 from hermes.web.today import get_on_employee_handler
 from hermes.web.today import get_off_employee_handler
+from hermes.web.receipt import get_receipt_handler
 
 
 @asyncio.coroutine
@@ -40,15 +41,20 @@ def run():
                          get_hermet_status_handler)
     app.router.add_route('POST', '/api/web/setBreakTime',
                          set_break_time_handler)
-    app.router.add_route('GET', '/api/web/employee', get_employee_handler)
+    app.router.add_route('GET', '/api/web/employee',
+                         get_employee_handler)
     app.router.add_route('GET', '/api/web/employee/search',
                          search_employee_handler)
     app.router.add_route('GET', '/api/web/onEmployee',
                          get_on_employee_handler)
     app.router.add_route('GET', '/api/web/offEmployee',
                          get_off_employee_handler)
-
-    app.router.add_route('POST', '/api/arduino/working', working_handler)
+    app.router.add_route('GET', '/api/web/employee/receipt',
+                         get_receipt_handler)
+    app.router.add_route('GET', '/api/web/hermet/status',
+                         get_hermet_status_handler)
+    app.router.add_route('POST', '/api/arduino/working',
+                         working_handler)
 
     server_handler = app.make_handler(access_log=logging.getLogger())
     server = loop.run_until_complete(loop.create_server(server_handler,
