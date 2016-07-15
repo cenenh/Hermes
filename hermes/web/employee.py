@@ -24,10 +24,10 @@ def add_employee_handler(request):
         return web.Response(headers=headers,
                             text=json.dumps(response))
     try:
-        employee_duty = DUTY[data['duty']]
+        unit_price = DUTY[data['duty']]
     except KeyError as e:
         logging.error(e)
-        employee_duty = '일용근무자'
+        unit_price = DUTY['일용근무자']
 
     args = (data['card_id'],
             data['employee_name'],
@@ -38,7 +38,7 @@ def add_employee_handler(request):
             data['registration_number'],
             data['email'],
             SERVER_URL+file_name,
-            DUTY[employee_duty])
+            unit_price)
 
     mysql = MySQL()
     yield from mysql.connect()

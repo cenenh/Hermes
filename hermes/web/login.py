@@ -7,7 +7,7 @@ import json
 
 @asyncio.coroutine
 def login_handler(request):
-    data = yield from request.json()
+    data = yield from request.post()
     mysql = MySQL()
     yield from mysql.connect()
     query = """SELECT * FROM administrator
