@@ -138,6 +138,7 @@ def get_employee_by_date_handler(request):
             'duty': row['duty'],
             'workspace': row['workspace'],
             'photo_url': row['photo_url'],
+            'enterprise': row['enterprise'],
             'go_work_time': row['go_work_time'],
             'off_work_time': row['off_work_time'],
             'registration_number': row['registration_number'],
