@@ -79,9 +79,10 @@ def search_employee_handler(request):
                WHERE employee_name = '%s'""" % employee_name
     rows = yield from mysql.execute_query(query)
     yield from mysql.close()
-    response = {}
-    response['size'] = len(rows)
-    response['employees'] = []
+    response = {
+        'size': len(rows),
+        'employees': []
+    }
     for row in rows:
         response['employees'].append({
             'card_id': row['card_id'],
