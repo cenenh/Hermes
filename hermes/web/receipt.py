@@ -29,5 +29,5 @@ def get_receipt_handler(request):
             'unit_price': row['unit_price'],
         })
 
-    return web.Response(headers={'content-type': 'application/json'}
+    return web.Response(headers={'content-type': 'application/json'},
                         text=json.dumps(response))

@@ -38,8 +38,7 @@ def add_employee_handler(request):
             data['registration_number'],
             data['email'],
             SERVER_URL+file_name,
-            DUTY[employee_duty]
-            )
+            DUTY[employee_duty])
 
     mysql = MySQL()
     yield from mysql.connect()
@@ -79,10 +78,12 @@ def search_employee_handler(request):
                WHERE employee_name = '%s'""" % employee_name
     rows = yield from mysql.execute_query(query)
     yield from mysql.close()
+
     response = {
         'size': len(rows),
         'employees': []
     }
+
     for row in rows:
         response['employees'].append({
             'card_id': row['card_id'],
@@ -90,12 +91,14 @@ def search_employee_handler(request):
             'phone_number': row['phone_number'],
             'email': row['email'],
             'duty': row['duty'],
+            'enterprise': row['enterprise'],
             'workspace': row['workspace'],
             'photo_url': row['photo_url'],
             'registration_number': row['registration_number'],
             'unit_price': row['unit_price'],
             'pay': row['unit_price'] * 20,
         })
+
     logging.info('get employee handler Response = {}\n'.format(response))
     headers = {'content-type': 'application/json'}
     return web.Response(headers=headers,
@@ -119,9 +122,12 @@ def get_employee_by_date_handler(request):
     yield from mysql.connect()
     rows = yield from mysql.execute_query(query)
     yield from mysql.close()
-    response = {}
-    response['size'] = len(rows)
-    response['employees'] = []
+
+    response = {
+        'size': len(rows),
+        'employees': []
+    }
+
     for row in rows:
         response['employees'].append({
             'date': date,
@@ -138,7 +144,6 @@ def get_employee_by_date_handler(request):
             'unit_price': row['unit_price'],
             'pay': row['unit_price'] * 20,
         })
-
     log = 'get_employee_by_date_handler Response = {}\n'
     logging.info(log.format(response))
     headers = {'content-type': 'application/json'}
@@ -152,9 +157,12 @@ def get_employee_handler(request):
     yield from mysql.connect()
     rows = yield from mysql.execute_query("""SELECT * from employee""")
     yield from mysql.close()
-    response = {}
-    response['size'] = len(rows)
-    response['employees'] = []
+
+    response = {
+        'size': len(rows),
+        'employees': []
+    }
+
     for row in rows:
         response['employees'].append({
             'date': getToday(),
