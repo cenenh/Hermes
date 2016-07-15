@@ -1,5 +1,6 @@
 # for file
 .*.swp
+.*.swo
 
 # for python virtualenv
 pip-selfcheck.json
