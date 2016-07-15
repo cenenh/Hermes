@@ -1,8 +1,9 @@
-from aiohttp import web, Response, errors
-from hermes.mysql import MySQL
 import asyncio
 import logging
 import json
+from aiohttp import web, Response, errors
+from hermes.mysql import MySQL
+from hermes.constant import HTTP_HEADERS
 
 
 @asyncio.coroutine
@@ -26,7 +27,5 @@ def login_handler(request):
         }
 
     logging.info('add login handler Response = {}'.format(response))
-
-    headers = {'content-type': 'application/json'}
-    return web.Response(headers=headers,
+    return web.Response(headers=HTTP_HEADERS,
                         text=json.dumps(response))

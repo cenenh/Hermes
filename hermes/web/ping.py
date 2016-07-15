@@ -1,6 +1,7 @@
 from aiohttp import web, Response
 import asyncio
 import json
+from hermes.constant import HTTP_HEADERS
 
 
 @asyncio.coroutine
@@ -9,6 +10,5 @@ def ping_handler(request):
         'code': 200,
         'data': 'pong'
     }
-    headers = {'content-type': 'application/json'}
-    return web.Response(headers=headers,
+    return web.Response(headers=HTTP_HEADERS,
                         text=json.dumps(response))

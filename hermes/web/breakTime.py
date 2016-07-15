@@ -5,6 +5,7 @@ import json
 from aiohttp import web, Response, errors
 from hermes.mysql import MySQL
 from hermes.util.time import getToday, getCurrentTime
+from hermes.constant import HTTP_HEADERS
 
 
 @asyncio.coroutine
@@ -29,5 +30,5 @@ def set_break_time_handler(request):
     }
     message = 'setBreakTimeHandler Response = {}'
     logging.debug(message.format(response))
-    return web.Response(headers={'content-type': 'application/json'},
+    return web.Response(headers=HTTP_HEADERS,
                         text=json.dumps(response))

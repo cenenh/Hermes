@@ -4,6 +4,7 @@ import logging
 import json
 from hermes.mysql import MySQL
 from aiohttp import web, Response, errors
+from hermes.constant import HTTP_HEADERS
 
 
 @asyncio.coroutine
@@ -29,5 +30,5 @@ def get_receipt_handler(request):
             'unit_price': row['unit_price'],
         })
 
-    return web.Response(headers={'content-type': 'application/json'},
+    return web.Response(headers=HTTP_HEADERS,
                         text=json.dumps(response))

@@ -4,6 +4,7 @@ import json
 import time
 from aiohttp import web, Response, errors
 from hermes.mysql import MySQL
+from hermes.constant import HTTP_HEADERS
 
 
 @asyncio.coroutine
@@ -16,6 +17,5 @@ def get_hermet_status_handler(request):
     results = yield from mysql.execute_query(query)
     response = {'code': 200, 'message': 'ok'}
     response['data'] = results
-    headers = {'content-type': 'application/json'}
-    return web.Response(headers=headers,
+    return web.Response(headers=HTTP_HEADERS,
                         text=json.dumps(response))

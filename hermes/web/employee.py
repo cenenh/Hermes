@@ -6,7 +6,7 @@ from aiohttp import web, Response, errors
 from hermes.mysql import MySQL
 from hermes.util.time import getToday
 from hermes.util.file import open_file, write_file, close_file, save_image
-from hermes.constant import DUTY, SERVER_URL
+from hermes.constant import DUTY, SERVER_URL, HTTP_HEADERS
 
 
 @asyncio.coroutine
@@ -20,8 +20,7 @@ def add_employee_handler(request):
             'code': 400,
             'message': 'fail'
         }
-        headers = {'content-type': 'application/json'}
-        return web.Response(headers=headers,
+        return web.Response(headers=HTTP_HEADERS,
                             text=json.dumps(response))
     try:
         unit_price = DUTY[data['duty']]
@@ -59,8 +58,7 @@ def add_employee_handler(request):
 
     logging.info('add employee handler Response = {}'.format(response))
 
-    headers = {'content-type': 'application/json'}
-    return web.Response(headers=headers,
+    return web.Response(headers=HTTP_HEADERS,
                         text=json.dumps(response))
 
 
@@ -100,8 +98,7 @@ def search_employee_handler(request):
         })
 
     logging.info('get employee handler Response = {}\n'.format(response))
-    headers = {'content-type': 'application/json'}
-    return web.Response(headers=headers,
+    return web.Response(headers=HTTP_HEADERS,
                         text=json.dumps(response))
 
 
@@ -147,8 +144,7 @@ def get_employee_by_date_handler(request):
         })
     log = 'get_employee_by_date_handler Response = {}\n'
     logging.info(log.format(response))
-    headers = {'content-type': 'application/json'}
-    return web.Response(headers=headers,
+    return web.Response(headers=HTTP_HEADERS,
                         text=json.dumps(response))
 
 
@@ -181,6 +177,5 @@ def get_employee_handler(request):
         })
 
     logging.info('get employee handler Response = {}\n'.format(response))
-    headers = {'content-type': 'application/json'}
-    return web.Response(headers=headers,
+    return web.Response(headers=HTTP_HEADERS,
                         text=json.dumps(response))
