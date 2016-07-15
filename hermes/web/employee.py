@@ -24,10 +24,10 @@ def add_employee_handler(request):
         return web.Response(headers=headers,
                             text=json.dumps(response))
     try:
-        DUTY[data['duty']]
+        employee_duty = DUTY[data['duty']]
     except KeyError as e:
         logging.error(e)
-        data['duty'] = '일용근무자'
+        employee_duty = '일용근무자'
 
     args = (data['card_id'],
             data['employee_name'],
@@ -38,7 +38,7 @@ def add_employee_handler(request):
             data['registration_number'],
             data['email'],
             SERVER_URL+file_name,
-            DUTY[data['duty']]
+            DUTY[employee_duty]
             )
 
     mysql = MySQL()
@@ -60,6 +60,42 @@ def add_employee_handler(request):
 
     logging.info('add employee handler Response = {}'.format(response))
 
+    headers = {'content-type': 'application/json'}
+    return web.Response(headers=headers,
+                        text=json.dumps(response))
+
+
+@asyncio.coroutine
+def search_employee_handler(request):
+    req = request.GET
+    employee_name = req.get('name', None)
+    if employee_name is None:
+        error = 'Error!, employee_name = {}'
+        logging.error(error.format(employee_name))
+        raise errors.HttpBadRequest('ERROR')
+    mysql = MySQL()
+    yield from mysql.connect()
+    query = """SELECT * FROM employee
+               WHERE employee_name = '%s'""" % employee_name
+    rows = yield from mysql.execute_query(query)
+    yield from mysql.close()
+    response = {}
+    response['size'] = len(rows)
+    response['employees'] = []
+    for row in rows:
+        response['employees'].append({
+            'card_id': row['card_id'],
+            'employee_name': row['employee_name'],
+            'phone_number': row['phone_number'],
+            'email': row['email'],
+            'duty': row['duty'],
+            'workspace': row['workspace'],
+            'photo_url': row['photo_url'],
+            'registration_number': row['registration_number'],
+            'unit_price': row['unit_price'],
+            'pay': row['unit_price'] * 20,
+        })
+    logging.info('get employee handler Response = {}\n'.format(response))
     headers = {'content-type': 'application/json'}
     return web.Response(headers=headers,
                         text=json.dumps(response))
@@ -97,6 +133,9 @@ def get_employee_by_date_handler(request):
             'photo_url': row['photo_url'],
             'go_work_time': row['go_work_time'],
             'off_work_time': row['off_work_time'],
+            'registration_number': row['registration_number'],
+            'unit_price': row['unit_price'],
+            'pay': row['unit_price'] * 20,
         })
 
     log = 'get_employee_by_date_handler Response = {}\n'
@@ -117,6 +156,7 @@ def get_employee_handler(request):
     response['employees'] = []
     for row in rows:
         response['employees'].append({
+            'date': getToday(),
             'card_id': row['card_id'],
             'employee_name': row['employee_name'],
             'enterprise': row['enterprise'],
